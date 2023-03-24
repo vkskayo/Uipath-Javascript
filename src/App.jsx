@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import { UiPathRobot } from "@uipath/robot";
+import OutputPanel from "./components/OutputPanel";
 
 function App() {
   const [processList, setProcessList] = useState([]);
   const [statusMap, setStatusMap] = useState({});
+  const [resultsState, setResultsState] = useState({});
 
   const getProcesses = async () => {
     const processes = await UiPathRobot.getProcesses();
@@ -29,11 +31,16 @@ function App() {
     });
 
     const results = await job;
+    setResultsState(results);
 
     if (results) {
       statusMap[index] = "RUN";
       setStatusMap({ ...statusMap, index: "RUN" });
     }
+  }
+
+  function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
   }
 
   useEffect(() => {
@@ -64,6 +71,7 @@ function App() {
           );
         })}
       </div>
+      {!isEmpty(resultsState) ? <OutputPanel output={resultsState} /> : null}
     </>
   );
 }
