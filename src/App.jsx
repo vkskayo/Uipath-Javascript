@@ -49,29 +49,35 @@ function App() {
 
   return (
     <>
-      <h2 className="text-center my-4">Your processes</h2>
-      <div className="d-flex flex-column mx-auto col-md-5 bg-light">
-        {processList.map((process, idx) => {
-          return (
-            <div
-              className="process-container border p-2 my-0 d-flex justify-content-center"
-              id={idx}
-            >
-              <div className="d-flex justify-content-between w-100 px-4">
-                <h4 className="text-center ">{process.name}</h4>
-                {statusMap[idx] == "RUN" ? (
-                  <button onClick={() => runProcess(idx)}>
-                    {statusMap[idx]}
-                  </button>
-                ) : (
-                  <button>{statusMap[idx]}</button>
-                )}
+      <div className="d-flex flex-column flex-md-row justify-content-center">
+        <div className="d-flex flex-column mx-auto col-md-5 bg-light my-5">
+          <h2 className="text-center my-4">Your processes</h2>
+          {processList.map((process, idx) => {
+            return (
+              <div
+                className="process-container border p-2 my-0 d-flex justify-content-center"
+                id={idx}
+              >
+                <div className="d-flex flex-column flex-md-row justify-content-between w-100 px-4">
+                  <h4 className="text-center ">
+                    {process.name.length <= 18
+                      ? process.name
+                      : process.name.substring(0, 15) + "..."}
+                  </h4>
+                  {statusMap[idx] == "RUN" ? (
+                    <button onClick={() => runProcess(idx)}>
+                      {statusMap[idx]}
+                    </button>
+                  ) : (
+                    <button>{statusMap[idx]}</button>
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+        {!isEmpty(resultsState) ? <OutputPanel output={resultsState} /> : null}
       </div>
-      {!isEmpty(resultsState) ? <OutputPanel output={resultsState} /> : null}
     </>
   );
 }
